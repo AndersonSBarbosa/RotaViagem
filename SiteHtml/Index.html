@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Busca de Rotas</title>
+
+  </head>
+  <body>
+
+    <label>Origem: </label>
+    <select name="Origem" id="Origem" class="form-control" >
+      <option value="GRU">GRU</option>
+      <option value="BRC">BRC</option>
+      <option value="SCL">SCL</option>
+      <option value="CDG">CDG</option>
+      <option value="ORL">ORL</option>
+    </select>
+
+
+    <label>Destino: </label>
+    <select name="Destino" id="Destino" class="form-control" >
+      <option value="BRC">BRC</option>
+      <option value="SCL">SCL</option>
+      <option value="CDG">CDG</option>
+      <option value="ORL">ORL</option>
+      <option value="GRU">GRU</option>
+   </select>
+
+    <button id="botao">Melhor Rota</button>
+    <hr>
+    <strong>Melhor Rota: <input type="text" id="resultadoRota" name="resultadoRota" readonly style="width: 300px;"></strong>
+    <br>
+    <br>
+    <strong>Valor: <input type="text"  id="resultadoRotaValor" name="resultadoRotaValor" readonly style="width: 300px;"></strong>
+
+
+    <script>
+      var btn = document.querySelector("#botao");
+
+
+
+      btn.addEventListener("click", () =>{
+            var Origem = document.getElementById("Origem").value;
+            var Destino = document.getElementById("Destino").value;
+
+            if(Origem == Destino){
+               LimparRota();
+               alert("Origen e Destino deve ser Diferente!")
+            }else{
+            
+               LimparRota();
+               var requestURL = `http://localhost:5235/api/v1/Rota/MelhorRota?origem=${Origem}&destino=${Destino}`;
+               var request = new XMLHttpRequest();
+               request.open("GET", requestURL);
+               request.responseType = "json";
+               request.send();
+
+               request.onload = function () {
+               var Rotas = request.response;
+
+               preencherRota(Rotas);
+               };
+            }
+
+
+      });
+
+      const preencherRota = (item) =>{
+         document.getElementById('resultadoRota').value = item.origem;
+         document.getElementById('resultadoRotaValor').value = item.valor;
+      }
+
+      const LimparRota = () =>{
+         document.getElementById('resultadoRota').value = '';
+         document.getElementById('resultadoRotaValor').value = '';
+      }
+
+    </script>
+  </body>
+</html>

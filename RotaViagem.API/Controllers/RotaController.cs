@@ -103,12 +103,7 @@ namespace RotaViagem.API.Controllers
         {
             var itens = await _rotaService.ObterMelhorRota(origem, destino);
 
-            return Ok(new ResultViewModel
-            {
-                Message = "Melhor Rota",
-                Success = true,
-                Data = itens
-            });
+            return Ok(itens);
         }
     }
 }
